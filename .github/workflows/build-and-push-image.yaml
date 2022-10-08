@@ -27,10 +27,6 @@ jobs:
         cd $FILE_PATH
         docker build --platform "linux/amd64" --build-arg VERSION="$VERSION" --build-arg VERSION_READABLE="$VERSION_READABLE" -t accern/docker-image:$VERSION_READABLE .
     
-    - name: Log in to Docker Hub
-      run: | 
-        docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-    
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
       with:
