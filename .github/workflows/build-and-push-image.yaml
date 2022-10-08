@@ -26,14 +26,3 @@ jobs:
         VERSION_READABLE=$(git describe --tag)
         cd $FILE_PATH
         docker build --platform "linux/amd64" --build-arg VERSION="$VERSION" --build-arg VERSION_READABLE="$VERSION_READABLE" -t accern/docker-image:$VERSION_READABLE .
-    
-    - name: Run Trivy vulnerability scanner
-      uses: aquasecurity/trivy-action@master
-      with:
-          image-ref: '${{ steps.build-image.outputs.IMAGE }}'
-          format: 'table'
-          exit-code: '0'
-          ignore-unfixed: true
-          vuln-type: 'os,library'
-          output: ${{ steps.date.outputs.date }}
-          severity: 'CRITICAL,HIGH'
