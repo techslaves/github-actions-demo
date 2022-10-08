@@ -21,7 +21,20 @@ jobs:
        fetch-depth: 0
     
     - name: Build and push docker image to DockerHub
+      id: build-image
       run: | 
         cd $FILE_PATH
         VERSION_READABLE=$(git describe --tag)
         docker build --platform "linux/amd64" -t utsavgarg007/docker-image:$VERSION_READABLE .
+        echo "::set-output name=IMAGE::utsavgarg007/docker-image:$VERSION_READABLE"
+        
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+          image-ref: '${{ steps.build-image.outputs.IMAGE }}'
+          format: 'table'
+          exit-code: '0'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          output: ${{ steps.date.outputs.date }}
+          severity: 'CRITICAL,HIGH'
