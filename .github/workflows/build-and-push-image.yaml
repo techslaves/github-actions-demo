@@ -22,7 +22,6 @@ jobs:
     
     - name: Build and push docker image to DockerHub
       run: | 
-        VERSION=$(git describe --always --abbrev=0 --match "NOT A TAG")
         VERSION_READABLE=$(git describe --tag)
         cd $FILE_PATH
-        docker build --platform "linux/amd64" --build-arg VERSION="$VERSION" --build-arg VERSION_READABLE="$VERSION_READABLE" -t accern/docker-image:$VERSION_READABLE .
+        docker build --platform "linux/amd64" --build-arg VERSION="$VERSION_READABLE" --build-arg VERSION_READABLE="$VERSION_READABLE" -t utsavgarg007/docker-image:$VERSION_READABLE .
