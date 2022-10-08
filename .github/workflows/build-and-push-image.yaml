@@ -9,8 +9,8 @@ on:
         - docker
 env:
   FILE_PATH: ${{ github.event.inputs.image }}
-  DOCKER_U: ${{ secrets.DOCKER_USER }}
-  DOCKER_PASS: ${{ secrets. DOCKER_PASSWORD }}
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_PASSWORD: ${{ secrets. DOCKER_PASSWORD }}
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -19,10 +19,6 @@ jobs:
       uses: actions/checkout@v2
       with:
        fetch-depth: 0
-       
-    - name: Log in to Docker Hub
-      run: | 
-        docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
     
     - name: Build and push docker image to DockerHub
       run: | 
@@ -30,6 +26,10 @@ jobs:
         VERSION_READABLE=$(git describe --tag)
         cd $FILE_PATH
         docker build --platform "linux/amd64" --build-arg VERSION="$VERSION" --build-arg VERSION_READABLE="$VERSION_READABLE" -t accern/docker-image:$VERSION_READABLE .
+    
+    - name: Log in to Docker Hub
+      run: | 
+        docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
     
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
