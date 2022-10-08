@@ -23,4 +23,5 @@ jobs:
     - name: Build and push docker image to DockerHub
       run: | 
         cd $FILE_PATH
-        docker build --platform "linux/amd64" -t utsavgarg007/docker-image:v1 .
+        VERSION_READABLE=$(git describe --tag)
+        docker build --platform "linux/amd64" -t utsavgarg007/docker-image:$VERSION_READABLE .
